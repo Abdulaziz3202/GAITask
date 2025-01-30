@@ -1,0 +1,10 @@
+
+  <div style="display: flex;">
+    <a class="dropdown-item" [routerLink]="['update-password']">
+      <i class="fas fa-user-edit"></i> {{ "UpdatePassword" | localize }}
+    </a>
+    <a class="dropdown-item" href="javascript:;" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> {{ "Logout" | localize }}
+    </a>
+  </div>
+

@@ -1,0 +1,120 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #createTaskForm="ngForm"
+  (ngSubmit)="save()"
+>
+  <abp-modal-header
+    [title]="'CreateNewTask' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+    <div class="form-group row required">
+        <label class="col-md-3 col-form-label" for="selectStatuses">
+          {{ "listofStatuses" | localize }}
+        </label>
+        <div class="col-md-4">
+            <ng-select 
+            style="min-width: 10rem;" 
+            name="selectStatus"
+            
+            [(ngModel)]="taskItem.status"
+            
+            [items]="statusesList" 
+            bindValue="id" 
+            bindLabel="name"
+            #selectStatusModel="ngModel" #selectStatusEl
+            >
+          
+          </ng-select>
+
+
+
+     
+        </div>
+      </div>
+
+       <div class="form-group row required">
+        <label class="col-md-3 col-form-label" for="selectUsers">
+          {{ "listofUsers" | localize }}
+        </label>
+        <div class="col-md-4">
+            <ng-select 
+            style="min-width: 10rem;" 
+            name="selectUser"
+            
+            [(ngModel)]="taskItem.assignedToUserId"
+           
+            [items]="usersList" 
+            bindValue="id" 
+            bindLabel="name"
+            #selectUserModel="ngModel" #selectUserEl
+            >
+          
+          </ng-select>
+
+
+
+          <abp-validation-summary
+            [control]="selectUserModel"
+            [controlEl]="selectUserEl"
+          ></abp-validation-summary>
+        </div>
+      </div>  
+
+    <div class="form-group row required">
+      <label class="col-md-3 col-form-label" for="title">
+        {{ "Title" | localize }}
+      </label>
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          name="title"
+          id="title"
+          minlength="2"
+          maxlength="64"
+          required
+          [(ngModel)]="taskItem.title"
+          #titleNameModel="ngModel"
+          #titleNameEl
+        />
+        <abp-validation-summary
+          [control]="titleNameModel"
+          [controlEl]="titleNameEl"
+        ></abp-validation-summary>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+        <label class="col-md-12 col-form-label" for="description">
+          {{ "description" | localize }}
+        </label>
+        <textarea required id="description" name="description"
+          [(ngModel)]="taskItem.description" rows="4" cols="20" required #descriptionModel="ngModel"
+          #descriptionEl>
+        </textarea>
+        <abp-validation-summary [control]="descriptionModel"
+          [controlEl]="descriptionEl"></abp-validation-summary>
+      </div>
+
+      <div class="col-md-4">
+        <label class="col-md-12 col-form-label" for="comment">
+          {{ "comment" | localize }}
+        </label>
+        <textarea required id="comment" name="comment"
+          [(ngModel)]="taskItem.comment" rows="4" cols="20" required #commentModel="ngModel"
+          #commentEl>
+        </textarea>
+        <abp-validation-summary [control]="commentModel"
+          [controlEl]="commentEl"></abp-validation-summary>
+      </div>
+ 
+  </div>
+  <abp-modal-footer
+    [cancelDisabled]="saving"
+    [saveDisabled]="!createTaskForm.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"
+  ></abp-modal-footer>
+</form>
+
