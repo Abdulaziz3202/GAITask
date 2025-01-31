@@ -11,7 +11,8 @@ namespace GAITask.EntityFrameworkCore
     {
         /* Define a DbSet for each entity of the application */
         public DbSet<TaskItem> Tasks { get; set; }
-
+        //TaskStatus
+        public DbSet<TaskStatus> TaskStatus { get; set; }
         public GAITaskDbContext(DbContextOptions<GAITaskDbContext> options)
             : base(options)
         {

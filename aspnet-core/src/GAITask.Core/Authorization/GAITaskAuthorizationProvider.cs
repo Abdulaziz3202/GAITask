@@ -8,6 +8,8 @@ namespace GAITask.Authorization
     {
         public override void SetPermissions(IPermissionDefinitionContext context)
         {
+
+            context.CreatePermission(PermissionNames.AdminOnly, L("AdminOnly"));
             context.CreatePermission(PermissionNames.Pages_Users, L("Users"));
             context.CreatePermission(PermissionNames.Pages_Users_Activation, L("UsersActivation"));
             context.CreatePermission(PermissionNames.Pages_Roles, L("Roles"));
@@ -15,7 +17,7 @@ namespace GAITask.Authorization
 
             context.CreatePermission(PermissionNames.Pages_Tasks, L("Tasks"));
             context.CreatePermission(PermissionNames.Pages_Tasks_Create, L("CreateTask"));
-            context.CreatePermission(PermissionNames.Pages_Tasks_Update_Status, L("TasksUpdateStatus"));
+            context.CreatePermission(PermissionNames.Pages_Tasks_Update_StatusOnly, L("TasksUpdateStatusOnly"));
     
 
 

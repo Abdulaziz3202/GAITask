@@ -29,6 +29,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   keyword = '';
   isActive: boolean | null;
   advancedFiltersVisible = false;
+ 
 
   constructor(
     injector: Injector,
@@ -40,6 +41,8 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
 
   createUser(): void {
     this.showCreateOrEditUserDialog();
+
+    
   }
 
   editUser(user: UserDto): void {

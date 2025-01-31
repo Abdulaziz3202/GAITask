@@ -58,6 +58,28 @@ namespace GAITask.Users
         {
             return base.GetAllAsync(input);
         }
+
+
+
+        public async Task<List<UserDto>> GetAllUsersAsync()
+        {
+
+          
+                var users = await _userManager.Users.ToListAsync();
+
+            var result= users.Select(user => new UserDto
+            {
+                Id = user.Id,
+                UserName = user.UserName
+
+            }).ToList();
+
+            return result;
+
+
+
+        }
+
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             CheckCreatePermission();

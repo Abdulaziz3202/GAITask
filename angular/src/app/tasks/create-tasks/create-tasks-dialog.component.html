@@ -10,19 +10,20 @@
   ></abp-modal-header>
   <div class="modal-body">
     <div class="form-group row required">
-        <label class="col-md-3 col-form-label" for="selectStatuses">
+        <label class="col-md-12 col-form-label" for="selectStatuses">
           {{ "listofStatuses" | localize }}
         </label>
-        <div class="col-md-4">
+        <div class="col-md-12">
             <ng-select 
+            [disabled]="!allowedToUpdateAllFields"
             style="min-width: 10rem;" 
             name="selectStatus"
             
-            [(ngModel)]="taskItem.status"
+            [(ngModel)]="taskItem.taskStatusId"
             
             [items]="statusesList" 
             bindValue="id" 
-            bindLabel="name"
+            bindLabel="title"
             #selectStatusModel="ngModel" #selectStatusEl
             >
           
@@ -34,20 +35,20 @@
         </div>
       </div>
 
-       <div class="form-group row required">
-        <label class="col-md-3 col-form-label" for="selectUsers">
+       <div class="form-group row required" *ngIf="allowedToUpdateAllFields">
+        <label class="col-md-12 col-form-label" for="selectUsers">
           {{ "listofUsers" | localize }}
         </label>
-        <div class="col-md-4">
+        <div class="col-md-12">
             <ng-select 
             style="min-width: 10rem;" 
             name="selectUser"
             
-            [(ngModel)]="taskItem.assignedToUserId"
+            [(ngModel)]="taskItem.assignedToId"
            
             [items]="usersList" 
             bindValue="id" 
-            bindLabel="name"
+            bindLabel="userName"
             #selectUserModel="ngModel" #selectUserEl
             >
           
@@ -63,10 +64,10 @@
       </div>  
 
     <div class="form-group row required">
-      <label class="col-md-3 col-form-label" for="title">
+      <label class="col-md-12 col-form-label" for="title">
         {{ "Title" | localize }}
       </label>
-      <div class="col-md-4">
+      <div class="col-md-12">
         <input
           type="text"
           class="form-control"
@@ -76,33 +77,33 @@
           maxlength="64"
           required
           [(ngModel)]="taskItem.title"
-          #titleNameModel="ngModel"
-          #titleNameEl
+          #titleModel="ngModel"
+          #titleEl
         />
         <abp-validation-summary
-          [control]="titleNameModel"
-          [controlEl]="titleNameEl"
+          [control]="titleModel"
+          [controlEl]="titleEl"
         ></abp-validation-summary>
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-12">
         <label class="col-md-12 col-form-label" for="description">
           {{ "description" | localize }}
         </label>
         <textarea required id="description" name="description"
-          [(ngModel)]="taskItem.description" rows="4" cols="20" required #descriptionModel="ngModel"
+          [(ngModel)]="taskItem.description" rows="4"  required #descriptionModel="ngModel"
           #descriptionEl>
         </textarea>
         <abp-validation-summary [control]="descriptionModel"
           [controlEl]="descriptionEl"></abp-validation-summary>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-12">
         <label class="col-md-12 col-form-label" for="comment">
           {{ "comment" | localize }}
         </label>
-        <textarea required id="comment" name="comment"
+        <textarea required id="comment" name="comment" 
           [(ngModel)]="taskItem.comment" rows="4" cols="20" required #commentModel="ngModel"
           #commentEl>
         </textarea>

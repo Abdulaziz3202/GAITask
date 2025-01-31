@@ -15,22 +15,15 @@ namespace GAITask.ProjectEntities
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        public TaskStatus Status { get; set; } = TaskStatus.Open;
 
-        public long AssignedToUserId { get; set; }
+        public long TaskStatusId { get; set; }
+        public TaskStatus TaskStatus { get; set; }
+
+        public long AssignedToId { get; set; }
         public User AssignedTo { get; set; }
 
         public string Comment { get; set; } = string.Empty;
     }
 
-    public enum TaskStatus
-    {
-        Open,
-        InProgress,
-        DoneDev,
-        DoneQA,
-        RejectedDev,
-        RejectedQA,
-        Closed
-    }
+   
 }

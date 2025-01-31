@@ -4,6 +4,7 @@ using GAITask.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GAITask.Migrations
 {
     [DbContext(typeof(GAITaskDbContext))]
-    partial class GAITaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250131111003_TaskStatusAsTable")]
+    partial class TaskStatusAsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1647,7 +1650,10 @@ namespace GAITask.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("AssignedToId")
+                    b.Property<long?>("AssignedToId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssignedToUserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Comment")
@@ -1957,9 +1963,7 @@ namespace GAITask.Migrations
                 {
                     b.HasOne("GAITask.Authorization.Users.User", "AssignedTo")
                         .WithMany("Tasks")
-                        .HasForeignKey("AssignedToId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AssignedToId");
 
                     b.HasOne("GAITask.ProjectEntities.TaskStatus", "TaskStatus")
                         .WithMany("TaskItems")

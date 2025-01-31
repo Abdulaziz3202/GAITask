@@ -741,62 +741,6 @@ export class TaskItemServiceProxy {
     }
 
     /**
-     * @param id (optional) 
-     * @return Success
-     */
-    get(id: string | undefined): Observable<TaskItemDto> {
-        let url_ = this.baseUrl + "/api/services/app/TaskItem/Get?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGet(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGet(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<TaskItemDto>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<TaskItemDto>;
-        }));
-    }
-
-    protected processGet(response: HttpResponseBase): Observable<TaskItemDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TaskItemDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
      * @param keyword (optional) 
      * @param skipCount (optional) 
      * @param maxResultCount (optional) 
@@ -897,6 +841,120 @@ export class TaskItemServiceProxy {
     }
 
     protected processCreate(response: HttpResponseBase): Observable<TaskItemDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TaskItemDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllTaskStatuses(): Observable<TaskStatusDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/TaskItem/GetAllTaskStatuses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllTaskStatuses(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllTaskStatuses(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TaskStatusDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TaskStatusDto[]>;
+        }));
+    }
+
+    protected processGetAllTaskStatuses(response: HttpResponseBase): Observable<TaskStatusDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(TaskStatusDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    get(id: string | undefined): Observable<TaskItemDto> {
+        let url_ = this.baseUrl + "/api/services/app/TaskItem/Get?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TaskItemDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TaskItemDto>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<TaskItemDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1470,6 +1528,64 @@ export class UserServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = UserDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllUsers(): Observable<UserDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/User/GetAllUsers";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllUsers(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllUsers(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UserDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UserDto[]>;
+        }));
+    }
+
+    protected processGetAllUsers(response: HttpResponseBase): Observable<UserDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(UserDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2395,8 +2511,8 @@ export class CreateTaskItemDto implements ICreateTaskItemDto {
     id: string;
     title: string | undefined;
     description: string | undefined;
-    status: number;
-    assignedToUserId: number;
+    taskStatusId: number;
+    assignedToId: number;
     assignedTo: User;
     comment: string | undefined;
 
@@ -2414,8 +2530,8 @@ export class CreateTaskItemDto implements ICreateTaskItemDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.description = _data["description"];
-            this.status = _data["status"];
-            this.assignedToUserId = _data["assignedToUserId"];
+            this.taskStatusId = _data["taskStatusId"];
+            this.assignedToId = _data["assignedToId"];
             this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : <any>undefined;
             this.comment = _data["comment"];
         }
@@ -2433,8 +2549,8 @@ export class CreateTaskItemDto implements ICreateTaskItemDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["description"] = this.description;
-        data["status"] = this.status;
-        data["assignedToUserId"] = this.assignedToUserId;
+        data["taskStatusId"] = this.taskStatusId;
+        data["assignedToId"] = this.assignedToId;
         data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
         data["comment"] = this.comment;
         return data;
@@ -2452,8 +2568,8 @@ export interface ICreateTaskItemDto {
     id: string;
     title: string | undefined;
     description: string | undefined;
-    status: number;
-    assignedToUserId: number;
+    taskStatusId: number;
+    assignedToId: number;
     assignedTo: User;
     comment: string | undefined;
 }
@@ -3593,8 +3709,9 @@ export class TaskItem implements ITaskItem {
     deletionTime: moment.Moment | undefined;
     title: string | undefined;
     description: string | undefined;
-    status: TaskStatus;
-    assignedToUserId: number;
+    taskStatusId: number;
+    taskStatus: TaskStatus;
+    assignedToId: number;
     assignedTo: User;
     comment: string | undefined;
 
@@ -3619,8 +3736,9 @@ export class TaskItem implements ITaskItem {
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
             this.title = _data["title"];
             this.description = _data["description"];
-            this.status = _data["status"];
-            this.assignedToUserId = _data["assignedToUserId"];
+            this.taskStatusId = _data["taskStatusId"];
+            this.taskStatus = _data["taskStatus"] ? TaskStatus.fromJS(_data["taskStatus"]) : <any>undefined;
+            this.assignedToId = _data["assignedToId"];
             this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : <any>undefined;
             this.comment = _data["comment"];
         }
@@ -3645,8 +3763,9 @@ export class TaskItem implements ITaskItem {
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["description"] = this.description;
-        data["status"] = this.status;
-        data["assignedToUserId"] = this.assignedToUserId;
+        data["taskStatusId"] = this.taskStatusId;
+        data["taskStatus"] = this.taskStatus ? this.taskStatus.toJSON() : <any>undefined;
+        data["assignedToId"] = this.assignedToId;
         data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
         data["comment"] = this.comment;
         return data;
@@ -3671,8 +3790,9 @@ export interface ITaskItem {
     deletionTime: moment.Moment | undefined;
     title: string | undefined;
     description: string | undefined;
-    status: TaskStatus;
-    assignedToUserId: number;
+    taskStatusId: number;
+    taskStatus: TaskStatus;
+    assignedToId: number;
     assignedTo: User;
     comment: string | undefined;
 }
@@ -3681,9 +3801,13 @@ export class TaskItemDto implements ITaskItemDto {
     id: string;
     title: string | undefined;
     description: string | undefined;
-    status: number;
-    assignedToUserId: number;
-    assignedTo: User;
+    taskStatus: TaskStatusDto;
+    taskStatusId: number;
+    statusTitle: string | undefined;
+    creationTime: moment.Moment;
+    createrUser: string | undefined;
+    assignedToId: number;
+    assignedTo: UserDto;
     comment: string | undefined;
 
     constructor(data?: ITaskItemDto) {
@@ -3700,9 +3824,13 @@ export class TaskItemDto implements ITaskItemDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.description = _data["description"];
-            this.status = _data["status"];
-            this.assignedToUserId = _data["assignedToUserId"];
-            this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : <any>undefined;
+            this.taskStatus = _data["taskStatus"] ? TaskStatusDto.fromJS(_data["taskStatus"]) : <any>undefined;
+            this.taskStatusId = _data["taskStatusId"];
+            this.statusTitle = _data["statusTitle"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.createrUser = _data["createrUser"];
+            this.assignedToId = _data["assignedToId"];
+            this.assignedTo = _data["assignedTo"] ? UserDto.fromJS(_data["assignedTo"]) : <any>undefined;
             this.comment = _data["comment"];
         }
     }
@@ -3719,8 +3847,12 @@ export class TaskItemDto implements ITaskItemDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["description"] = this.description;
-        data["status"] = this.status;
-        data["assignedToUserId"] = this.assignedToUserId;
+        data["taskStatus"] = this.taskStatus ? this.taskStatus.toJSON() : <any>undefined;
+        data["taskStatusId"] = this.taskStatusId;
+        data["statusTitle"] = this.statusTitle;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["createrUser"] = this.createrUser;
+        data["assignedToId"] = this.assignedToId;
         data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
         data["comment"] = this.comment;
         return data;
@@ -3738,9 +3870,13 @@ export interface ITaskItemDto {
     id: string;
     title: string | undefined;
     description: string | undefined;
-    status: number;
-    assignedToUserId: number;
-    assignedTo: User;
+    taskStatus: TaskStatusDto;
+    taskStatusId: number;
+    statusTitle: string | undefined;
+    creationTime: moment.Moment;
+    createrUser: string | undefined;
+    assignedToId: number;
+    assignedTo: UserDto;
     comment: string | undefined;
 }
 
@@ -3799,14 +3935,110 @@ export interface ITaskItemDtoPagedResultDto {
     totalCount: number;
 }
 
-export enum TaskStatus {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
+export class TaskStatus implements ITaskStatus {
+    id: number;
+    title: string | undefined;
+    taskItems: TaskItem[] | undefined;
+
+    constructor(data?: ITaskStatus) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            if (Array.isArray(_data["taskItems"])) {
+                this.taskItems = [] as any;
+                for (let item of _data["taskItems"])
+                    this.taskItems.push(TaskItem.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TaskStatus {
+        data = typeof data === 'object' ? data : {};
+        let result = new TaskStatus();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        if (Array.isArray(this.taskItems)) {
+            data["taskItems"] = [];
+            for (let item of this.taskItems)
+                data["taskItems"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): TaskStatus {
+        const json = this.toJSON();
+        let result = new TaskStatus();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITaskStatus {
+    id: number;
+    title: string | undefined;
+    taskItems: TaskItem[] | undefined;
+}
+
+export class TaskStatusDto implements ITaskStatusDto {
+    id: number;
+    title: string | undefined;
+
+    constructor(data?: ITaskStatusDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): TaskStatusDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TaskStatusDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        return data;
+    }
+
+    clone(): TaskStatusDto {
+        const json = this.toJSON();
+        let result = new TaskStatusDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITaskStatusDto {
+    id: number;
+    title: string | undefined;
 }
 
 export enum TenantAvailabilityState {

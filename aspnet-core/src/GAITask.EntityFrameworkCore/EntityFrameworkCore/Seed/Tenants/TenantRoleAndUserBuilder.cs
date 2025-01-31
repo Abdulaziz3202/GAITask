@@ -53,7 +53,7 @@ namespace GAITask.EntityFrameworkCore.Seed.Tenants
             var permissions = PermissionFinder
                 .GetAllPermissions(new GAITaskAuthorizationProvider())
                 .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
-                            !grantedPermissions.Contains(p.Name))
+                            !grantedPermissions.Contains(p.Name) && !p.Name.Equals("Pages.Tasks.Update.StatusOnly"))
                 .ToList();
 
             if (permissions.Any())
@@ -117,7 +117,7 @@ namespace GAITask.EntityFrameworkCore.Seed.Tenants
             var permissions = PermissionFinder
                 .GetAllPermissions(new GAITaskAuthorizationProvider())
                 .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant) &&
-                            !grantedPermissions.Contains(p.Name) && (p.Name.Equals("Pages.Tasks") || p.Name.Equals("Pages.Tasks.Update.Status")))
+                            !grantedPermissions.Contains(p.Name) && (p.Name.Equals("Pages.Tasks") || p.Name.Equals("Pages.Tasks.Update.StatusOnly")))
                 .ToList();
 
             if (permissions.Any())

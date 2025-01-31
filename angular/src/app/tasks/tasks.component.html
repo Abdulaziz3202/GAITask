@@ -5,7 +5,7 @@
                 <div class="col-6">
                     <h1>{{ "Tasks" | localize }}</h1>
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-6 text-right" *ngIf="!regularUser" >
                     <a href="javascript:;" class="btn bg-blue" (click)="createTask()">
                         <i class="fa fa-plus-square"></i>
                         {{ "Create" | localize }}
@@ -39,19 +39,7 @@
                                         [(ngModel)]="keyword"
                                         (keyup.enter)="getDataPage(1)"
                                 />
-                                <div class="input-group-append">
-                                    <button
-                                            type="button"
-                                            class="btn btn-default"
-                                            (click)="advancedFiltersVisible = !advancedFiltersVisible"
-                                    >
-                                        <i
-                                                class="fas"
-                                                [class.fa-angle-up]="advancedFiltersVisible"
-                                                [class.fa-angle-down]="!advancedFiltersVisible"
-                                        ></i>
-                                    </button>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
@@ -126,7 +114,7 @@
                                 <th>{{ "AssignedTo" | localize }}</th>
                                 <th>{{ "Comment" | localize }}</th>
                                 <th>{{ "CreationTime" | localize }}</th>
-                                <th>{{ "CreaterUser" | localize }}</th>
+                                
                                 <th style="width: 310px;">{{ "Actions" | localize }}</th>
                             </tr>
                             </thead>
@@ -145,11 +133,11 @@
                             >
                                 <td>{{ task.title }}</td>
                                 <td>{{ task.description }}</td>
-                                <td>{{ task.status }}</td>
-                                <td>{{ task.assignedTo }}</td>
+                                <td>{{ task.taskStatus.title }}</td>
+                                <td>{{ task.assignedTo.userName }}</td>
                                 <td>{{ task.comment }}</td>
                                 <td>{{ task.creationTime }}</td>
-                                <td>{{ task.createrUser }}</td>
+                                
 
                         
                                 <td>
@@ -162,6 +150,7 @@
                                         {{ "Edit" | localize }}
                                     </button>
                                     <button
+                                    *ngIf="!regularUser"
                                             type="button"
                                             class="btn btn-sm bg-danger mx-2"
                                             (click)="delete(task)"

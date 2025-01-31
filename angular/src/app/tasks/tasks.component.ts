@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from '@node_modules/ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
@@ -20,20 +20,22 @@ class PagedTasksRequestDto extends PagedRequestDto {
     animations: [appModuleAnimation()],
   styleUrls: ['./tasks.component.css']
 })
-export class TasksComponent extends PagedListingComponentBase<TaskItemDto> {
+export class TasksComponent extends PagedListingComponentBase<TaskItemDto>  {
   tasks: TaskItemDto[] = [];
   keyword = '';
   isActive: boolean | null;
   advancedFiltersVisible = false;
-
+  regularUser:boolean=false;
   constructor(
     injector: Injector,
     private _taskService: TaskItemServiceProxy,
     private _modalService: BsModalService
   ) {
     super(injector);
+    
+    this.regularUser=this.permission.isGranted('Pages.Tasks.Update.StatusOnly');
   }
-
+ 
   createTask(): void {
     this.showCreateOrEditTaskDialog();
   }
@@ -70,6 +72,8 @@ export class TasksComponent extends PagedListingComponentBase<TaskItemDto> {
       )
       .subscribe((result: TaskItemDtoPagedResultDto) => {
         this.tasks = result.items;
+        console.log(this.tasks);
+        
         this.showPaging(result, pageNumber);
       });
   }

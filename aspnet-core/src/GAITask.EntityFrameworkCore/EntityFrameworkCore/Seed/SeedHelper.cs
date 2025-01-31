@@ -33,8 +33,41 @@ namespace GAITask.EntityFrameworkCore.Seed
             new TenantRoleAndUserBuilder(context, 1).Create();
 
 
-          
-
+            if (!context.TaskStatus.Any())
+            {
+                context.TaskStatus.AddRange(new List<TaskStatus> { 
+                
+                    new TaskStatus
+                    {
+                        Title="Open"
+                    },
+                    new TaskStatus
+                    {
+                        Title="InProgress"
+                    },
+                    new TaskStatus
+                    {
+                        Title="DoneDev"
+                    },
+                     new TaskStatus
+                    {
+                        Title="DoneQA"
+                    },
+                      new TaskStatus
+                    {
+                        Title="RejectedDev"
+                    },
+                       new TaskStatus
+                    {
+                        Title="RejectedQA"
+                    },
+                        new TaskStatus
+                    {
+                        Title="Closed"
+                    }}
+                );
+            }
+            context.SaveChanges();
             // Seed tasks
             if (!context.Tasks.Any())
             {
@@ -44,24 +77,24 @@ namespace GAITask.EntityFrameworkCore.Seed
                 {
                     Title = "Fix Login Bug",
                     Description = "Resolve login issue for mobile users",
-                    Status = TaskStatus.InProgress,
-                    AssignedToUserId = 3,
+                    TaskStatusId = context.TaskStatus.First().Id,
+                    AssignedToId = 3,
                     Comment = "Investigating the root cause."
                 },
                 new TaskItem
                 {
                     Title = "Add Dark Mode",
                     Description = "Implement dark mode in the UI",
-                    Status = TaskStatus.Open,
-                    AssignedToUserId = 3,
+                    TaskStatusId = context.TaskStatus.First().Id,
+                    AssignedToId = 3,
                     Comment = "Waiting for UI design."
                 },
                 new TaskItem
                 {
                     Title = "Optimize DB Queries",
                     Description = "Improve query performance",
-                    Status = TaskStatus.DoneDev,
-                    AssignedToUserId = 2,
+                    TaskStatusId = context.TaskStatus.First().Id,
+                    AssignedToId = 2,
                     Comment = "Queries optimized and tested."
                 }
             });
