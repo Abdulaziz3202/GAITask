@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 
 namespace GAITask.TaskItemAppService
 {
+    [AbpAuthorize]
     public class TaskItemAppService : AsyncCrudAppService<TaskItem, TaskItemDto, Guid, PagedTaskItemResultRequestDto, CreateTaskItemDto, TaskItemDto>
     {
 
@@ -103,6 +104,26 @@ namespace GAITask.TaskItemAppService
             {
                 throw;
             }
+        }
+
+        public override async Task<TaskItemDto> UpdateAsync(TaskItemDto input)
+        {
+            var userId = AbpSession.UserId ?? throw new AbpAuthorizationException("User not logged in.");
+            var hasAdminPermission = await PermissionChecker.IsGrantedAsync("AdminOnly");
+
+            // Get the existing task from the database
+            var task = await Repository.GetAsync(input.Id);
+
+            if (!hasAdminPermission)
+            {
+                // Regular users can only update TaskStatusId
+                task.TaskStatusId = input.TaskStatusId;
+                await Repository.UpdateAsync(task);
+                return MapToEntityDto(task);
+            }
+
+            // Admins can update everything
+            return await base.UpdateAsync(input);
         }
     }
 }
